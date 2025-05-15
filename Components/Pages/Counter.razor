@@ -1,0 +1,71 @@
+﻿@using Core.DTO
+@using H3PublisherApp.Services
+@using MudBlazor
+@page "/counter"
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-4">
+    <MudText Typo="Typo.h4" Class="mb-4">Authors</MudText>
+
+    @if (authors == null)
+    {
+        <MudProgressCircular Indeterminate="true" />
+    }
+    else
+    {
+        @foreach (var author in authors)
+        {
+            <MudCard Class="mb-4">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Author: @author.FirstName @author.LastName
+                    </MudText>
+                    <MudText Typo="Typo.h6">
+                        Books written: @author.Books.Count()
+                    </MudText>
+
+                    @if (author.Books?.Any() == true)
+                    {
+                        <MudList T="AuthorDTO" Dense="true">
+                            @foreach (var book in author.Books)
+                            {
+                                <MudListItem>
+                                    <MudText><b>Book:</b> @book.Title (@book.PublishDate.ToShortDateString())</MudText>
+                                    <MudText Class="ml-4"><i>Price:</i> $@book.BasePrice</MudText>
+
+                                    @if (book.Cover != null)
+                                    {
+                                        <MudText Class="ml-4"><b>Cover:</b> @book.Cover.Title (@(book.Cover.DigitalOnly ? "Digital" : "Print"))</MudText>
+
+                                        @if (book.Cover.Artists?.Any() == true)
+                                        {
+                                            <MudText Class="ml-5"><i>Artists:</i></MudText>
+                                            <ul class="ml-6">
+                                                @foreach (var artist in book.Cover.Artists)
+                                                {
+                                                    <li>@artist.FirstName @artist.LastName</li>
+                                                }
+                                            </ul>
+                                        }
+                                    }
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                    else
+                    {
+                        <MudText Class="text-muted">No books found.</MudText>
+                    }
+                </MudCardContent>
+            </MudCard>
+        }
+    }
+</MudContainer>
+
+@code {
+    private List<AuthorDTO> authors;
+    private AuthorRepo _authorRepo = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _authorRepo.GetAuthors();
+        authors = response;
+    }
+}

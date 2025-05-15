@@ -1,0 +1,65 @@
+﻿@page "/"
+@* @using DatingSite.Components.Dialog *@
+@* @inject IDialogService DialogService *@
+@* @using DatingSite.Models
+@using DatingSite.Services *@
+@using MudBlazor
+@inject NavigationManager Navigation
+@* @inject IAccountService accountService
+@inject CustomAuthenticationStateProvider AuthenticationStateProvider *@
+<MudLayout>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+        <!-- Hero Section -->
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12" sm="8" md="6">
+                <MudCard Class="text-center p-4">
+                    <MudText Typo="Typo.h3">Welcome to publisher app</MudText>
+                    <MudText Typo="Typo.subtitle1" Class="mt-2">
+                        Sign into your account
+                    </MudText>
+                    <MudDivider Class="my-2" />
+                    <MudButton Color="Color.Primary" OnClick="@(() => TestApi())">Sign up</MudButton>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</MudLayout>
+@code {
+    // private Account Account;
+    // private bool isAuthenticated = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Account = await AuthenticationStateProvider.GetAccountAsync();
+    }
+
+    private async void OpenCreateAccountDialog()
+    {
+        // var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        // var banan = DialogService.Show<CreateAccountDialog>("Simple Dialog", options);
+        // var result = await banan.Result;
+        // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // isAuthenticated = authState.User.Identity.IsAuthenticated;
+        // StateHasChanged();
+    }
+
+    private async void OpenLoginDialog()
+    {
+        // var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        // var banan = DialogService.Show<LoginDialog>("login Dialog", options);
+        // var result = await banan.Result;
+        // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+        // StateHasChanged();
+    }
+
+    private async void TestApi()
+    {
+        // var apiCaller = new AuthorRepo();
+        // var weatherData = await apiCaller.GetWeatherForecast();
+        // var banan = "banan";
+    }
+}
