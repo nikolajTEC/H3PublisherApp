@@ -1,64 +1,54 @@
 ﻿@using Core.DTO
+@using H3PublisherApp.Dialog
 @using H3PublisherApp.Services
 @using MudBlazor
+@using MudBlazor.Services
+@inject IDialogService DialogService
 @page "/counter"
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-4">
-    <MudText Typo="Typo.h4" Class="mb-4">Authors</MudText>
-
-    @if (authors == null)
-    {
-        <MudProgressCircular Indeterminate="true" />
-    }
-    else
-    {
+@if (authors == null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else
+{
+    <MudGrid Spacing="6">
         @foreach (var author in authors)
         {
-            <MudCard Class="mb-4">
-                <MudCardContent>
-                    <MudText Typo="Typo.h6">Author: @author.FirstName @author.LastName
-                    </MudText>
-                    <MudText Typo="Typo.h6">
-                        Books written: @author.Books.Count()
-                    </MudText>
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="pa-4" Style="height: 100%;">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.h6">
+                            Author: @author.FirstName @author.LastName
+                        </MudText>
 
-                    @if (author.Books?.Any() == true)
-                    {
-                        <MudList T="AuthorDTO" Dense="true">
-                            @foreach (var book in author.Books)
-                            {
-                                <MudListItem>
-                                    <MudText><b>Book:</b> @book.Title (@book.PublishDate.ToShortDateString())</MudText>
-                                    <MudText Class="ml-4"><i>Price:</i> $@book.BasePrice</MudText>
+                        <MudDivider />
 
-                                    @if (book.Cover != null)
-                                    {
-                                        <MudText Class="ml-4"><b>Cover:</b> @book.Cover.Title (@(book.Cover.DigitalOnly ? "Digital" : "Print"))</MudText>
+                        <MudText Typo="Typo.body1">
+                            Books written: @author.Books.Count()
+                        </MudText>
 
-                                        @if (book.Cover.Artists?.Any() == true)
-                                        {
-                                            <MudText Class="ml-5"><i>Artists:</i></MudText>
-                                            <ul class="ml-6">
-                                                @foreach (var artist in book.Cover.Artists)
-                                                {
-                                                    <li>@artist.FirstName @artist.LastName</li>
-                                                }
-                                            </ul>
-                                        }
-                                    }
-                                </MudListItem>
-                            }
-                        </MudList>
-                    }
-                    else
-                    {
-                        <MudText Class="text-muted">No books found.</MudText>
-                    }
-                </MudCardContent>
-            </MudCard>
+                        @if (author.Books?.Any() == true)
+                        {
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => OpenAuthorBooksAsync(author.Books))">
+                                View Books
+                            </MudButton>
+                        }
+                        else
+                        {
+                            <MudText Class="text-muted mt-2">No books found.</MudText>
+                        }
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => OpenAuthorBooksAsync(author.Books))">
+                            Add book
+                        </MudButton>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
         }
-    }
-</MudContainer>
+    </MudGrid>
+}
+
+
 
 @code {
     private List<AuthorDTO> authors;
@@ -67,5 +57,24 @@
     {
         var response = await _authorRepo.GetAuthors();
         authors = response;
+    }
+    private Task OpenAuthorBooksAsync(List<BookDTO> books)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters
+        {
+            { "Books", books }
+        };
+        return DialogService.ShowAsync<BooksDetails>("Simple Dialog", parameters, options);
+    }
+
+    private Task AddBookAsync(List<BookDTO> books)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var parameters = new DialogParameters
+        {
+            { "Books", books }
+        };
+        return DialogService.ShowAsync<BooksDetails>("Simple Dialog", parameters, options);
     }
 }

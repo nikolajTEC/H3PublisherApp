@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "REST-API", "..\REST-API\RES
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublisherRepository", "..\PublisherRepository\PublisherRepository.csproj", "{74D74ADE-37E9-4684-BC4C-20D64BDE2094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\Core\Core.csproj", "{A528D0C7-22A4-46C2-AF4F-A6F0ECB29594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "..\Core\Core.csproj", "{A528D0C7-22A4-46C2-AF4F-A6F0ECB29594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

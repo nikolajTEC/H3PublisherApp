@@ -1,0 +1,52 @@
+﻿@using Core.DTO
+@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+        <MudGrid Spacing="6">
+            @foreach (var book in Books)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="pa-4" Style="height: 100%;">
+                        <MudStack Spacing="1">
+                            <MudText Typo="Typo.h6">
+                                Book: @book.Title
+                            </MudText>
+
+                            <MudText Typo="Typo.body1">
+                                Price: @book.BasePrice
+                            </MudText>
+                            <MudText Typo="Typo.body1">
+                                Published: @book.PublishDate
+                            </MudText>
+                            @if (book.Cover != null && book.Cover.Artists != null)
+                            {
+                                @foreach (var artist in book.Cover.Artists)
+                                {
+                                    <MudText Typo="Typo.body1">
+                                        Artists: @artist.FirstName @artist.LastName
+                                    </MudText>
+                                }
+                            }
+                        </MudStack>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public List<BookDTO> Books { get; set; } = new();
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}
