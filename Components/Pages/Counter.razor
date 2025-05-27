@@ -38,7 +38,7 @@ else
                         {
                             <MudText Class="text-muted mt-2">No books found.</MudText>
                         }
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => OpenAuthorBooksAsync(author.Books))">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => AddBookAsync(author))">
                             Add book
                         </MudButton>
                     </MudStack>
@@ -68,13 +68,13 @@ else
         return DialogService.ShowAsync<BooksDetails>("Simple Dialog", parameters, options);
     }
 
-    private Task AddBookAsync(List<BookDTO> books)
+    private Task AddBookAsync(AuthorDTO author)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters
         {
-            { "Books", books }
+            { "Author", author }
         };
-        return DialogService.ShowAsync<BooksDetails>("Simple Dialog", parameters, options);
+        return DialogService.ShowAsync<AddBookDialog>("Simple Dialog", parameters, options);
     }
 }

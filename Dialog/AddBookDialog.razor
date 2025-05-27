@@ -1,0 +1,76 @@
+﻿@using Core.DTO
+@using MudBlazor
+<MudDialog Style="width:800px">
+    <DialogContent>
+        <MudPaper Class="pa-4">
+
+            <MudText Typo="Typo.h6">Create New Book</MudText>
+
+            <!-- Book Fields -->
+            <MudTextField @bind-Value="Book.Title" Label="Title" Variant="Variant.Outlined" />
+            <MudDatePicker @bind-Date="date" Label="Publish Date" />
+            <MudTextField @bind-Value="Book.BasePrice" Label="Base Price" Variant="Variant.Outlined" />
+
+            <MudDivider Class="my-2" />
+
+            <!-- Cover Fields -->
+            <MudText Typo="Typo.subtitle1">Cover</MudText>
+            <MudTextField @bind-Value="Book.Cover.Title" Label="Cover Title" Variant="Variant.Outlined" />
+            <MudCheckBox @bind-Value="Book.Cover.DigitalOnly" Label="Digital Only" />
+
+            <MudDivider Class="my-2" />
+
+            <!-- Artists List -->
+            <MudText Typo="Typo.subtitle1">Artists</MudText>
+
+            @foreach (var artist in Book.Cover.Artists)
+            {
+                <MudPaper Class="pa-2 mb-2" Elevation="1">
+                    <MudTextField @bind-Value="artist.FirstName" Label="First Name" Variant="Variant.Outlined" />
+                    <MudTextField @bind-Value="artist.LastName" Label="Last Name" Variant="Variant.Outlined" />
+                </MudPaper>
+            }
+
+            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="AddArtist">
+                Add Artist
+            </MudButton>
+        </MudPaper>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Submit" Color="Color.Primary">Save</MudButton>
+        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public AuthorDTO Author { get; set; } = new();
+
+    private DateTime? date;
+
+    public BookDTO Book { get; set; } = new()
+        {
+            Cover = new CoverDTO
+            {
+                Artists = new List<ArtistDTO>()
+            }
+        };
+
+
+    private async Task Submit()
+    {
+        
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    void AddArtist()
+    {
+        Book.Cover.Artists.Add(new ArtistDTO());
+    }
+
+}
