@@ -20,6 +20,10 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<CreateUseCases>();
+builder.Services.AddScoped<AuthorUseCase>();
+builder.Services.AddScoped<ArtistUseCase>();
+builder.Services.AddScoped<CoverUseCase>();
+builder.Services.AddScoped<BookUseCase>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

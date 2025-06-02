@@ -13,10 +13,11 @@ public class AuthorRepo
         try
         {
             // Define your API URL
-            string url = "https://localhost:7038/WeatherForecast/authors";
+            string url = "https://localhost:7038/api/Author/get-authors";
+
 
             // Call the API
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(url);  
             response.EnsureSuccessStatusCode();
 
             // Read and parse the response body
