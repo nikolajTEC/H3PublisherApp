@@ -1,4 +1,4 @@
-﻿@using Core.DTO
+﻿@using H3PublisherApp.Models
 @using MudBlazor
 
 <MudDialog>
@@ -44,7 +44,7 @@
     private IMudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public List<BookDTO> Books { get; set; } = new();
+    public List<Book> Books { get; set; } = new();
 
     private void Submit() => MudDialog.Close(DialogResult.Ok(true));
 

@@ -1,5 +1,6 @@
 ﻿
 using Core.DTO;
+using H3PublisherApp.Models;
 using Newtonsoft.Json;
 using REST_API.Objects;
 
@@ -8,7 +9,7 @@ public class AuthorRepo
 {
     private static readonly HttpClient client = new HttpClient();
 
-    public async Task<List<AuthorDTO>> GetAuthors()
+    public async Task<List<Author>> GetAuthors()
     {
         try
         {
@@ -21,7 +22,7 @@ public class AuthorRepo
 
             // Read and parse the response body
             string responseBody = await response.Content.ReadAsStringAsync();
-            List<AuthorDTO> authors = JsonConvert.DeserializeObject<List<AuthorDTO>>(responseBody);
+            List<Author> authors = JsonConvert.DeserializeObject<List<Author>>(responseBody);
 
             return authors;
         }

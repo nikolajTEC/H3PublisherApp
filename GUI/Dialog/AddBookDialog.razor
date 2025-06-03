@@ -1,4 +1,4 @@
-﻿@using Core.DTO
+﻿@using H3PublisherApp.Models
 @using MudBlazor
 <MudDialog Style="width:800px">
     <DialogContent>
@@ -48,15 +48,15 @@
     private IMudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public AuthorDTO Author { get; set; } = new();
+    public Author Author { get; set; } = new();
 
     private DateTime? date;
 
-    public BookDTO Book { get; set; } = new()
+    public Book Book { get; set; } = new()
         {
-            Cover = new CoverDTO
+            Cover = new Cover
             {
-                Artists = new List<ArtistDTO>()
+                Artists = new List<Artist>()
             }
         };
 
@@ -70,7 +70,7 @@
 
     void AddArtist()
     {
-        Book.Cover.Artists.Add(new ArtistDTO());
+        Book.Cover.Artists.Add(new Artist());
     }
 
 }

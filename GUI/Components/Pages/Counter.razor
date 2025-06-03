@@ -1,11 +1,15 @@
-﻿@using Core.DTO
-@using H3PublisherApp.Dialog
+﻿@using H3PublisherApp.Dialog
+@using H3PublisherApp.Models
 @using H3PublisherApp.Services
 @using MudBlazor
 @using MudBlazor.Services
 @inject IDialogService DialogService
 @page "/counter"
 
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="AddAuthorAsync">
+    Add author
+</MudButton>
 @if (authors == null)
 {
     <MudProgressCircular Indeterminate="true" />
@@ -51,14 +55,14 @@ else
 
 
 @code {
-    private List<AuthorDTO> authors;
+    private List<Author> authors;
     private AuthorRepo _authorRepo = new();
     protected override async Task OnInitializedAsync()
     {
         var response = await _authorRepo.GetAuthors();
         authors = response;
     }
-    private Task OpenAuthorBooksAsync(List<BookDTO> books)
+    private Task OpenAuthorBooksAsync(List<Book> books)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters
@@ -68,7 +72,7 @@ else
         return DialogService.ShowAsync<BooksDetails>("Simple Dialog", parameters, options);
     }
 
-    private Task AddBookAsync(AuthorDTO author)
+    private Task AddBookAsync(Author author)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters
@@ -76,5 +80,15 @@ else
             { "Author", author }
         };
         return DialogService.ShowAsync<AddBookDialog>("Simple Dialog", parameters, options);
+    }
+    private Task AddAuthorAsync()
+    {
+        throw new NotImplementedException();
+        // var options = new DialogOptions { CloseOnEscapeKey = true };
+        // var parameters = new DialogParameters
+        // {
+        //     { "Author", author }
+        // };
+        // return DialogService.ShowAsync<AddBookDialog>("Simple Dialog", parameters, options);
     }
 }
