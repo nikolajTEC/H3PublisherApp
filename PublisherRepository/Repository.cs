@@ -54,7 +54,12 @@ namespace PublisherRepository
 
         public async Task<T?> GetByIdAsync<T>(int id) where T : class
         {
-            return await _context.Set<T>().FindAsync(id);
+            var entityType = _context.Model.FindEntityType(typeof(T));
+            var primaryKey = entityType.FindPrimaryKey().Properties.First();
+            var keyName = primaryKey.Name;
+
+            return await _context.Set<T>()
+        .FirstOrDefaultAsync(e => EF.Property<int>(e, keyName) == id);
         }
         public async Task UpdateAsync<T>(T entity) where T : class
         {

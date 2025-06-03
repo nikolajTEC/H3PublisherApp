@@ -15,5 +15,12 @@ namespace H3PublisherApp.Services
             var response = await client.PostAsJsonAsync(url, book);
 
         }
+        public async Task DeleteBookAsync(int bookId)
+        {
+            string url = $"https://localhost:7038/api/book/delete-book?bookId={bookId}";
+
+            var response = await client.PostAsJsonAsync(url, bookId);
+
+        }
     }
 }

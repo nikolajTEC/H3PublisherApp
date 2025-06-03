@@ -16,18 +16,13 @@ namespace Core.UseCases
             _repo = repo;
         }
 
-        //public async Task CreateBook(string title, DateTime publishDate, double basePrice, int authorId)
-        //{
-        //    var book = new Books(title, publishDate, basePrice, authorId);
-        //    await _repo.AddBook(book);
-        //}
         public async Task CreateBook(Books book)
         {
-            await _repo.AddBook(book);
+            await _repo.AddAsync(book);
         }
         public async Task DeleteBook(int id)
         {
-            var book = _repo.GetByIdAsync<Books>(id);
+            var book = await _repo.GetByIdAsync<Books>(id);
             await _repo.DeleteAsync(book);
         }
     }

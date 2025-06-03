@@ -21,11 +21,18 @@ namespace REST_API.Controllers
         [HttpPost("create-book")]
         public async Task<IActionResult> CreateBook([FromBody] BookDTO bookDto)
         {
-            // Map DTO to EF entity
             var book = _mapper.Map<Books>(bookDto);
             await _usecase.CreateBook(book);
 
             return Ok(book);
         }
-    }
+		[HttpPost("delete-book")]
+		public async Task<IActionResult> DeleteBook(int bookId)
+		{
+			await _usecase.DeleteBook(bookId);
+
+			return Ok();
+		}
+	}
 }
+ 
