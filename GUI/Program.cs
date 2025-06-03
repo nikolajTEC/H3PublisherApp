@@ -1,4 +1,5 @@
 using H3PublisherApp.Components;
+using H3PublisherApp.Services;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddMudServices();
+builder.Services.AddScoped<AuthorRepo>();
+builder.Services.AddScoped<BookRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -30,4 +30,19 @@ public class AuthorRepo
             return null;
         }
     }
+    public async Task CreateAuthorAsync(string firstname, string lastname)
+    {
+        string url = "https://localhost:7038/api/Author/create-author";
+        var request = new
+        {
+            FirstName = firstname,
+            LastName = lastname
+        };
+
+        var json = JsonConvert.SerializeObject(request);
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync(url, content);
+
+    }
 }

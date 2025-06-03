@@ -83,12 +83,9 @@ else
     }
     private Task AddAuthorAsync()
     {
-        throw new NotImplementedException();
-        // var options = new DialogOptions { CloseOnEscapeKey = true };
-        // var parameters = new DialogParameters
-        // {
-        //     { "Author", author }
-        // };
-        // return DialogService.ShowAsync<AddBookDialog>("Simple Dialog", parameters, options);
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<AddAuthor>("Add Name", parameters, options);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using H3PublisherApp.Models
+@using H3PublisherApp.Services
 @using MudBlazor
 <MudDialog Style="width:800px">
     <DialogContent>
@@ -7,8 +8,8 @@
             <MudText Typo="Typo.h6">Submit new author</MudText>
 
             <!-- Book Fields -->
-            <MudTextField @bind-Value="Author.FirstName" Label="Title" Variant="Variant.Outlined" />
-            <MudTextField @bind-Value="Author.LastName" Label="Base Price" Variant="Variant.Outlined" />         
+            <MudTextField @bind-Value="Author.FirstName" Label="First name" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="Author.LastName" Label="Last name" Variant="Variant.Outlined" />         
         </MudPaper>
     </DialogContent>
 
@@ -21,12 +22,14 @@
 @code {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
+    [Inject]
+    private AuthorRepo _repo { get; set; }
 
     public Author Author { get; set; } = new();
-
     private async Task Submit()
     {
-
+        await _repo.CreateAuthorAsync(Author.FirstName, Author.LastName);
+        MudDialog.Close();
     }
 
     private void Cancel() => MudDialog.Cancel();

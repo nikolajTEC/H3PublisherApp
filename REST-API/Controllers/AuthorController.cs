@@ -20,9 +20,9 @@ namespace REST_API.Controllers
         }
 
         [HttpPost("create-author")]
-        public async Task<IActionResult> CreateAuthor(string firstName, string lastName)
+        public async Task<IActionResult> CreateAuthor(CreateAuthorRequest request)
         {
-            await _authorUseCase.CreateAuthor(firstName, lastName);
+            await _authorUseCase.CreateAuthor(request.FirstName, request.LastName);
             return Ok(); 
         }
 
