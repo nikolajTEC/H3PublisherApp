@@ -2,7 +2,11 @@
 {
     public class Books
     {
-        public Books(string title, DateTime publishDate, double basePrice, int authorId)
+        public Books()
+        {
+            
+        }
+        public Books(string title, DateOnly publishDate, double basePrice, int authorId)
         {
             Title = title;
             PublishDate = publishDate;
@@ -12,7 +16,7 @@
 
         public int BooksId { get; set; }
         public string Title { get; set; }
-        public DateTime PublishDate { get; set; }
+        public DateOnly PublishDate { get; set; }
         public double BasePrice { get; set; }
         public int AuthorId { get; set; }
         public Authors Author { get; set; }

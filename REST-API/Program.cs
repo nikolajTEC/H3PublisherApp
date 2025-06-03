@@ -1,3 +1,4 @@
+using AutoMapper;
 using Core;
 using Core.UseCases;
 using Microsoft.EntityFrameworkCore;
@@ -16,16 +17,22 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Or whatever database provider you're using
 );
 
-//builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddAutoMapper(typeof(REST_API.MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<CreateUseCases>();
+builder.Services.AddScoped<ArtistUseCase>();
+builder.Services.AddScoped<AuthorUseCase>();
+builder.Services.AddScoped<BookUseCase>();
+builder.Services.AddScoped<CoverUseCase>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+//var mapper = app.Services.GetRequiredService<IMapper>();
+//mapper.ConfigurationProvider.AssertConfigurationIsValid();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

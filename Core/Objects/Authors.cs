@@ -2,6 +2,10 @@
 {
     public class Authors
     {
+        public Authors()
+        {
+            
+        }
         public Authors(string firstName, string lastName)
         {
             FirstName = firstName;

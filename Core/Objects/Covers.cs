@@ -2,6 +2,10 @@
 {
     public class Covers
     {
+        public Covers()
+        {
+            
+        }
         public Covers(string title, bool digitalOnly, int bookId)
         {
             Title = title;

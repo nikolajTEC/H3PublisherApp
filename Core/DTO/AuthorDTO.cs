@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.DTO
+﻿namespace Core.DTO
 {
-    public class AuthorDTO
+	public class AuthorDTO
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
