@@ -1,8 +1,5 @@
-﻿
-using Core.DTO;
-using H3PublisherApp.Models;
+﻿using H3PublisherApp.Models;
 using Newtonsoft.Json;
-using REST_API.Objects;
 
 namespace H3PublisherApp.Services;
 public class AuthorRepo
