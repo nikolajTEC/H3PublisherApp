@@ -16,7 +16,7 @@ namespace Core.UseCases
 
         public async Task<List<Authors>> GetAuthors()
         {
-            var authors = await _repo.GetAuthors();
+            var authors = await _repo.GetAuthorsAsNoTracking();
             return authors;
         }
         public async Task CreateAuthor(string firstName, string lastName)

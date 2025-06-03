@@ -1,0 +1,80 @@
+﻿@page "/books"
+@page "/books/{AuthorId:int?}"
+@inject BookRepo bookrepo
+@inject NavigationManager Nav
+@using H3PublisherApp.Models
+@using H3PublisherApp.Services
+@using MudBlazor
+
+<PageTitle>Books</PageTitle>
+
+<MudGrid Spacing="6">
+    @if (books == null)
+    {
+        <MudProgressCircular Indeterminate="true" />
+    }
+    else if (!books.Any())
+    {
+        <MudText>No books found.</MudText>
+    }
+    else
+    {
+        @foreach (var book in books)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="pa-4" Style="height: 100%;">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.h6">Book: @book.Title</MudText>
+                            <MudText Typo="Typo.body1">Price: @book.BasePrice</MudText>
+                            <MudText Typo="Typo.body1">Published: @book.PublishDate</MudText>
+
+                            @if (book.Cover?.Artists != null)
+                        {
+                            @foreach (var artist in book.Cover.Artists)
+                            {
+                                <MudText Typo="Typo.body1">Artist: @artist.FirstName @artist.LastName</MudText>
+                            }
+                        }
+
+                        <MudButton Color="Color.Error" OnClick="() => Delete(book.BooksId)">Delete</MudButton>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+        }
+    }
+</MudGrid>
+
+<MudButton Class="mt-4" OnClick="@GoBack">Back</MudButton>
+
+@code {
+    [Parameter] public int? AuthorId { get; set; }
+
+    private List<Book> books = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthorId.HasValue)
+        {
+            books = await bookrepo.GetBooksByAuthorIdAsync(AuthorId.Value);
+        }
+        else
+        {
+            books = await bookrepo.GetBooksAsync();
+        }
+    }
+
+    private async Task Delete(int bookId)
+    {
+        await bookrepo.DeleteBookAsync(bookId);
+        if (AuthorId.HasValue)
+        {
+            books = await bookrepo.GetBooksByAuthorIdAsync(AuthorId.Value);
+        }
+        else
+        {
+            books = await bookrepo.GetBooksAsync();
+        }
+    }
+
+    private void GoBack() => Nav.NavigateTo("/counter");
+}

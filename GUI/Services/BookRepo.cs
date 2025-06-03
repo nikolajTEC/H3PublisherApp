@@ -1,4 +1,5 @@
-﻿using H3PublisherApp.Models;
+﻿using H3PublisherApp.Components.Pages;
+using H3PublisherApp.Models;
 using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
 
@@ -21,6 +22,55 @@ namespace H3PublisherApp.Services
 
             var response = await client.PostAsJsonAsync(url, bookId);
 
+        }
+        public async Task<List<Book>> GetBooksByAuthorIdAsync(int authorId)
+        {
+            try
+            {
+                // Define your API URL
+                string url = $"https://localhost:7038/api/book/get-books-by-authorId?authorId={authorId}";
+
+
+                // Call the API
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                // Read and parse the response body
+                string responseBody = await response.Content.ReadAsStringAsync();
+                List<Book> books = JsonConvert.DeserializeObject<List<Book>>(responseBody);
+
+                return books;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<List<Book>> GetBooksAsync()
+        {
+            try
+            {
+                // Define your API URL
+                string url = "https://localhost:7038/api/book/get-books";
+
+
+                // Call the API
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                // Read and parse the response body
+                string responseBody = await response.Content.ReadAsStringAsync();
+                List<Book> books = JsonConvert.DeserializeObject<List<Book>>(responseBody);
+
+                return books;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
         }
     }
 }

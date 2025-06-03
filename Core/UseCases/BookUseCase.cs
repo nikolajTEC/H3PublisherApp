@@ -1,9 +1,4 @@
 ﻿using REST_API.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.UseCases
 {
@@ -24,6 +19,16 @@ namespace Core.UseCases
         {
             var book = await _repo.GetByIdAsync<Books>(id);
             await _repo.DeleteAsync(book);
+        }
+        public async Task<List<Books>> GetBooks()
+        {
+            var books = await _repo.GetBooksAsNoTracking();
+            return books;
+        }
+        public async Task<List<Books>> GetBooksByAuthorId(int authorId)
+        {
+            var books = await _repo.GetBooksByAuthorIdAsNoTracking(authorId);
+            return books;
         }
     }
 }

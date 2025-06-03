@@ -33,6 +33,25 @@ namespace REST_API.Controllers
 
 			return Ok();
 		}
-	}
+
+        [HttpGet("get-books")]
+        public async Task<List<BookDTO>> GetBooks()
+        {
+            var books = await _usecase.GetBooks();
+            //return authors;
+            var result = _mapper.Map<List<BookDTO>>(books);
+
+            return result;
+        }
+        [HttpGet("get-books-by-authorId")]
+        public async Task<List<BookDTO>> GetBooksByAuthorId(int authorId)
+        {
+            var books = await _usecase.GetBooksByAuthorId(authorId);
+            //return authors;
+            var result = _mapper.Map<List<BookDTO>>(books);
+
+            return result;
+        }
+    }
 }
  

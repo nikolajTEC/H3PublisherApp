@@ -20,7 +20,6 @@
                             <MudText Typo="Typo.body1">
                                 Published: @book.PublishDate
                             </MudText>
-                            <MudButton OnClick="() => Delete(book.BooksId)">Delete</MudButton>
                             @if (book.Cover != null && book.Cover.Artists != null)
                             {
                                 @foreach (var artist in book.Cover.Artists)
@@ -30,6 +29,7 @@
                                     </MudText>
                                 }
                             }
+                            <MudButton OnClick="() => Delete(book.BooksId)">Delete</MudButton>
                         </MudStack>
                     </MudPaper>
                 </MudItem>

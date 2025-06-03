@@ -19,7 +19,7 @@ namespace Core.UseCases
         public async Task CreateArtist(string firstname, string lastName)
         {
             var artist = new Artists(firstname, lastName);
-            await _repo.AddArtist(artist);
+            await _repo.AddAsync(artist);
         }
         public async Task DeleteArtist(int id)
         {

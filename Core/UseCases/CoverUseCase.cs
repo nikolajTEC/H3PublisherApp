@@ -14,7 +14,7 @@ namespace Core.UseCases
         public async Task CreateCover(string title, bool digitalOnly, int bookId)
         {
             var cover = new Covers(title, digitalOnly, bookId);
-            await _repo.AddCover(cover);
+            await _repo.AddAsync(cover);
         }
         public async Task EditCover(int id, string? title, bool digitalOnly)
         {

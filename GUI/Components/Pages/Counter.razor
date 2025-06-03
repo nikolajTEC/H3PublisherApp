@@ -3,6 +3,7 @@
 @using H3PublisherApp.Services
 @using MudBlazor
 @using MudBlazor.Services
+@inject NavigationManager Nav
 @inject IDialogService DialogService
 @page "/counter"
 
@@ -36,6 +37,9 @@ else
                         {
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => OpenAuthorBooksAsync(author.Books))">
                                 View Books
+                            </MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => ViewBookPage(author.Id))">
+                                View BooksPage
                             </MudButton>
                         }
                         else
@@ -87,5 +91,10 @@ else
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
         return DialogService.ShowAsync<AddAuthor>("Add Name", parameters, options);
+    }
+
+    private void ViewBookPage(int authorId)
+    {
+        Nav.NavigateTo($"/books/{authorId}");
     }
 }

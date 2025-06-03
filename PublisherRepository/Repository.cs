@@ -12,37 +12,15 @@ namespace PublisherRepository
         public Repository(DataContext context)
         {
             _context = context;
-        }
-        public async Task AddAuthor(Authors author)
-        {
-            _context.Authors.Add(author);
-            await _context.SaveChangesAsync();
-        }
-        public async Task AddBook(Books book)
-        {
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddCover(Covers cover)
-        {
-            _context.Covers.Add(cover);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddArtist(Artists artists)
-        {
-            _context.Artists.Add(artists);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<List<Authors>> GetAuthors()
+        }      
+        public async Task<List<Authors>> GetAuthorsAsNoTracking()
         {
             var authors = await _context.Authors
                 .Include(a => a.Books)
                     .ThenInclude(b => b.Cover)
                         .ThenInclude(c => c.ArtistCovers)
                             .ThenInclude(ac => ac.Artist)
+                            .AsNoTracking()
                 .ToListAsync();
             return authors;
         }
@@ -71,6 +49,29 @@ namespace PublisherRepository
         {
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<List<Books>> GetBooksByAuthorIdAsNoTracking(int authorId)
+        {
+            var books = await _context.Books
+                .Where(x => x.AuthorId == authorId)
+                .Include(x => x.Cover)
+                .ThenInclude(x => x.ArtistCovers)
+                .ThenInclude(x => x.Artist)
+                .AsNoTracking()
+                .ToListAsync();
+            return books;
+        }
+        public async Task<List<Books>> GetBooksAsNoTracking()
+        {
+            var books = await _context.Books
+                .Include(x => x.Cover)
+                .ThenInclude(x => x.ArtistCovers)
+                .ThenInclude(x => x.Artist)
+                .AsNoTracking()
+                .ToListAsync();
+            return books;
         }
     }
 }
