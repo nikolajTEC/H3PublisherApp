@@ -1,4 +1,5 @@
-﻿using REST_API.Objects;
+﻿using Core.Objects;
+using REST_API.Objects;
 
 namespace Core
 {
@@ -12,5 +13,6 @@ namespace Core
         Task DeleteAsync<T>(T entity) where T : class;
         Task<List<Books>> GetBooksAsNoTracking();
         Task<List<Books>> GetBooksByAuthorIdAsNoTracking(int authorId);
+        Task<User?> GetUserByName(string name);
     }
 }

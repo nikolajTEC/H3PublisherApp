@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Objects;
 using Microsoft.EntityFrameworkCore;
 using PublisherRepository.Data;
 using REST_API.Objects;
@@ -72,6 +73,12 @@ namespace PublisherRepository
                 .AsNoTracking()
                 .ToListAsync();
             return books;
+        }
+
+        public async Task<User?> GetUserByName(string name)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == name);
+            return user;
         }
     }
 }

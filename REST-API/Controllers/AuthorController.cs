@@ -30,7 +30,6 @@ namespace REST_API.Controllers
         public async Task<List<AuthorDTO>> GetAuthors()
         {
             var authors = await _authorUseCase.GetAuthors();
-            //return authors;
             var result = _mapper.Map<List<AuthorDTO>>(authors);
 
             return result;

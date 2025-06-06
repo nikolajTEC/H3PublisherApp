@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Objects;
+using Microsoft.EntityFrameworkCore;
 using REST_API.Objects;
 using System;
 using System.Collections.Generic;
@@ -64,5 +65,7 @@ namespace PublisherRepository.Data
         public DbSet<Authors> Authors { get; set; }
         public DbSet<Books> Books { get; set; }
         public DbSet<Covers> Covers { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }
