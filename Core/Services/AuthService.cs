@@ -50,15 +50,11 @@ namespace Core.Services
             await _repo.AddAsync(user);
         }
 
-        public async Task<string?> Login(UserDTO userDTO)
+        public async Task<string?> Login(string name, string password)
         {
-            var user = await _repo.GetUserByName(userDTO.Username);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(userDTO.Password, user.Password))
+            var user = await _repo.GetUserByName(name);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return null;
-            //    if (user == null | userDTO.Password != user.Password)
-            //{
-            //    return null;
-            //}
             var token = GenerateToken(user);
             return token;
         }

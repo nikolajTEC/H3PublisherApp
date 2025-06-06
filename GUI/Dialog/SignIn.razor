@@ -1,0 +1,62 @@
+﻿@using Blazored.LocalStorage
+@using H3PublisherApp.Models
+@using H3PublisherApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using System.Security.Claims
+@using System.Text.Json
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavManager
+@inject CustomAuthStateProvider AuthProvider
+
+<MudDialog Style="width:800px">
+    <DialogContent>
+        <MudPaper Class="pa-4">
+
+            <MudText Typo="Typo.h6">Sign</MudText>
+
+            <!-- Book Fields -->
+            <MudTextField @bind-Value="User.Name" Label="Name" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="User.Password" Label="Password" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="User.Role" Label="Password" Variant="Variant.Outlined" />
+        </MudPaper>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Submit" Color="Color.Primary">Save</MudButton>
+        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    [Inject]
+    private UserRepo _repo { get; set; }
+
+    public User User { get; set; } = new();
+    private async Task Submit()
+    {
+        var response = await _repo.SignInAsync(User.Name, User.Password);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+            var token = json["token"];
+            await LocalStorage.SetItemAsync("authToken", token);     
+            //((CustomAuthStateProvider)AuthProvider).NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")))));
+            //NavManager.NavigateTo("/");
+        }
+        MudDialog.Close();
+    }
+    private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+    {
+        var payload = jwt.Split('.')[1];
+        var jsonBytes = Convert.FromBase64String(payload);
+        var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes)!;
+
+        return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!));
+    }
+    private void Cancel() => MudDialog.Cancel();
+
+}

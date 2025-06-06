@@ -1,6 +1,7 @@
 ﻿using Core.DTO;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using REST_API.Requests;
 
 namespace REST_API.Controllers
 {
@@ -22,9 +23,9 @@ namespace REST_API.Controllers
             return Ok();
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserDTO userDTO)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            var token = await _authService.Login(userDTO);
+            var token = await _authService.Login(request.Name, request.Password);
             if (token == null)
             {
                 return Unauthorized();

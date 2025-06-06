@@ -1,5 +1,7 @@
+using Blazored.LocalStorage;
 using H3PublisherApp.Components;
 using H3PublisherApp.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,11 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 builder.Services.AddScoped<AuthorRepo>();
 builder.Services.AddScoped<BookRepo>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5168/") });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

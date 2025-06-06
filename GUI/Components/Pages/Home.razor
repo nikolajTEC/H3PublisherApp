@@ -18,7 +18,7 @@
                         Sign into your account
                     </MudText>
                     <MudDivider Class="my-2" />
-                    <MudButton Color="Color.Primary" OnClick="@(() => TestApi())">Sign up</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => OpenLoginDialog())">Sign in</MudButton>
                 </MudCard>
             </MudItem>
         </MudGrid>
@@ -54,12 +54,5 @@
         // isAuthenticated = authState.User.Identity.IsAuthenticated;
 
         // StateHasChanged();
-    }
-
-    private async void TestApi()
-    {
-        // var apiCaller = new AuthorRepo();
-        // var weatherData = await apiCaller.GetWeatherForecast();
-        // var banan = "banan";
     }
 }
