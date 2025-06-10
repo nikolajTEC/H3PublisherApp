@@ -51,5 +51,10 @@ namespace H3PublisherApp.Services
             }
             return Convert.FromBase64String(base64);
         }
+        public async Task MarkUserAsLoggedOut()
+        {
+            await _localStorage.RemoveItemAsync("authToken");
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal())));
+        }
     }
 }

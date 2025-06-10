@@ -1,58 +1,70 @@
 ﻿@page "/"
-@* @using DatingSite.Components.Dialog *@
-@* @inject IDialogService DialogService *@
-@* @using DatingSite.Models
-@using DatingSite.Services *@
+@inject IDialogService DialogService
+@using H3PublisherApp.Dialog
+@using H3PublisherApp.Services
 @using MudBlazor
 @inject NavigationManager Navigation
-@* @inject IAccountService accountService
-@inject CustomAuthenticationStateProvider AuthenticationStateProvider *@
+@inject CustomAuthStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
 <MudLayout>
     <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
-        <!-- Hero Section -->
         <MudGrid Justify="Justify.Center">
             <MudItem xs="12" sm="8" md="6">
-                <MudCard Class="text-center p-4">
-                    <MudText Typo="Typo.h3">Welcome to publisher app</MudText>
-                    <MudText Typo="Typo.subtitle1" Class="mt-2">
-                        Sign into your account
-                    </MudText>
-                    <MudDivider Class="my-2" />
-                    <MudButton Color="Color.Primary" OnClick="@(() => OpenLoginDialog())">Sign in</MudButton>
-                </MudCard>
+                @if (isAuthenticated)
+                {
+                    <MudCard Class="text-center p-4">
+                        <MudText Typo="Typo.h4">Welcome back!</MudText>
+                        <MudText Typo="Typo.subtitle1" Class="mt-2">You are signed in.</MudText>
+                        <MudButton OnClick="@Logout">Logout</MudButton>                        
+                    </MudCard>
+                }
+                else
+                {
+                    <MudCard Class="text-center p-4">
+                        <MudText Typo="Typo.h3">Welcome to publisher app</MudText>
+                        <MudText Typo="Typo.subtitle1" Class="mt-2">
+                            Please sign into your account
+                        </MudText>
+                        <MudDivider Class="my-2" />
+                        <MudButton Color="Color.Primary" OnClick="@OpenLoginDialog">Sign in</MudButton>
+                    </MudCard>
+                }
             </MudItem>
         </MudGrid>
     </MudContainer>
 </MudLayout>
+
 @code {
-    // private Account Account;
-    // private bool isAuthenticated = false;
+    private bool isAuthenticated = false;
+    private bool hasCheckedAuth = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Account = await AuthenticationStateProvider.GetAccountAsync();
-    }
-
-    private async void OpenCreateAccountDialog()
-    {
-        // var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        // var banan = DialogService.Show<CreateAccountDialog>("Simple Dialog", options);
-        // var result = await banan.Result;
-        // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        // isAuthenticated = authState.User.Identity.IsAuthenticated;
-        // StateHasChanged();
+        if (firstRender)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+            hasCheckedAuth = true;
+            StateHasChanged();
+        }
     }
 
     private async void OpenLoginDialog()
     {
-        // var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog = DialogService.Show<SignIn>("Login", options);
+        var result = await dialog.Result;
 
-        // var banan = DialogService.Show<LoginDialog>("login Dialog", options);
-        // var result = await banan.Result;
-        // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        // isAuthenticated = authState.User.Identity.IsAuthenticated;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
 
-        // StateHasChanged();
+        StateHasChanged();
+    }
+
+    private async Task Logout()
+    {
+        await AuthenticationStateProvider.MarkUserAsLoggedOut();
+        isAuthenticated = false;
+        StateHasChanged();
     }
 }

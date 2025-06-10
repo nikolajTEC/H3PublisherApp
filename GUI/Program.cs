@@ -13,6 +13,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<AuthorRepo>();
 builder.Services.AddScoped<BookRepo>();
 builder.Services.AddScoped<CustomAuthStateProvider>();
+builder.Services.AddScoped<UserRepo>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
