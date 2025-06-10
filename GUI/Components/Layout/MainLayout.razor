@@ -1,20 +1,45 @@
 ﻿@inherits LayoutComponentBase
+@using H3PublisherApp.Services
 @using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@using H3PublisherApp.Dialog
+@inject IDialogService DialogService
+@inject CustomAuthStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 
 <CascadingAuthenticationState>
+    <MudThemeProvider />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <MudPopoverProvider />
+
     <div class="page">
         <div class="sidebar">
             <NavMenu />
         </div>
         <main>
-            <div class="top-row px-4">
-                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <div class="top-row px-4 d-flex justify-content-between align-items-center">
+
+                @if (isAuthenticated)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Logout"
+                                   Color="Color.Default"
+                                   OnClick="Logout"/>
+                }
+                else
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Login"
+                                   Color="Color.Default"
+                                   OnClick="OpenLoginDialog"/>
+                }
             </div>
+
             <article class="content px-4">
                 @Body
             </article>
         </main>
     </div>
+
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
@@ -22,10 +47,35 @@
     </div>
 </CascadingAuthenticationState>
 
-@* Required *@
-<MudThemeProvider />
-<MudPopoverProvider />
-@* Needed for dialogs *@
-<MudDialogProvider />
-@* Needed for snackbars *@
-<MudSnackbarProvider />
+@code {
+    private bool isAuthenticated = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+            StateHasChanged();
+        }
+    }
+
+    private async void OpenLoginDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog = DialogService.Show<SignIn>("Login", options);
+        var result = await dialog.Result;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        StateHasChanged();
+    }
+
+    private async Task Logout()
+    {
+        await AuthenticationStateProvider.MarkUserAsLoggedOut();
+        isAuthenticated = false;
+        Navigation.NavigateTo("/", true);
+    }
+}
