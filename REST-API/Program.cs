@@ -28,7 +28,7 @@ builder.Services.AddScoped<ArtistUseCase>();
 builder.Services.AddScoped<AuthorUseCase>();
 builder.Services.AddScoped<BookUseCase>();
 builder.Services.AddScoped<CoverUseCase>();
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

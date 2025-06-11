@@ -21,5 +21,17 @@ namespace Core.UseCases
             var artist = _repo.GetByIdAsync<Artists>(id);
             await _repo.DeleteAsync(artist);
         }
+        public async Task EditArtist(int id, string? firstName, string? lastName)
+        {
+            var artist = await _repo.GetByIdAsync<Artists>(id);
+
+            if (!string.IsNullOrWhiteSpace(firstName) && artist.FirstName != firstName)
+                artist.FirstName = firstName;
+
+            if (!string.IsNullOrWhiteSpace(lastName) && artist.LastName != lastName)
+                artist.LastName = lastName;
+
+            await _repo.UpdateAsync(artist!);
+        }
     }
 }

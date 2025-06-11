@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Core.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
         private readonly IRepository _repo;
@@ -18,7 +18,7 @@ namespace Core.Services
             _repo = repo;
         }
 
-        public string GenerateToken(User user)
+        private string GenerateToken(User user)
         {
             var claims = new[]
             {
