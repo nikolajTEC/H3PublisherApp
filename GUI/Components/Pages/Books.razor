@@ -1,79 +1,166 @@
 ﻿@page "/books"
-@page "/books/{AuthorId:int?}"
 @inject BookRepo bookrepo
 @inject NavigationManager Nav
+@inject CustomAuthStateProvider AuthStateProvider
 @using H3PublisherApp.Models
 @using H3PublisherApp.Services
 @using MudBlazor
 
-<PageTitle>Books</PageTitle>
+<MudGrid>
+    @foreach (var book in books)
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Class="pa-4">
+                @if (editingBookId == book.BooksId)
+                {
+                    <MudText Typo="Typo.h6">Edit Book</MudText>
 
-<MudGrid Spacing="6">
-    @if (books == null)
-    {
-        <MudProgressCircular Indeterminate="true" />
-    }
-    else if (!books.Any())
-    {
-        <MudText>No books found.</MudText>
-    }
-    else
-    {
-        @foreach (var book in books)
-        {
-            <MudItem xs="12" sm="6" md="4">
-                <MudPaper Class="pa-4" Style="height: 100%;">
-                    <MudStack Spacing="1">
-                        <MudText Typo="Typo.h6">Book: @book.Title</MudText>
-                            <MudText Typo="Typo.body1">Price: @book.BasePrice</MudText>
-                            <MudText Typo="Typo.body1">Published: @book.PublishDate</MudText>
+                    <!-- Book Fields -->
+                    <MudTextField @bind-Value="book.Title" Label="Title" Variant="Variant.Outlined" />
+                    <MudDatePicker @bind-Date="bookDate" Label="Publish Date" />
+                    <MudTextField @bind-Value="book.BasePrice" Label="Base Price" Variant="Variant.Outlined" />
 
-                            @if (book.Cover?.Artists != null)
+                    <MudDivider Class="my-2" />
+
+                    <!-- Cover Fields -->
+                    <MudText Typo="Typo.subtitle1">Cover</MudText>
+
+                    @if (book.Cover != null)
+                    {
+                        <MudTextField @bind-Value="book.Cover.Title" Label="Cover Title" Variant="Variant.Outlined" />
+                        <MudCheckBox @bind-Value="book.Cover.DigitalOnly" Label="Digital Only" />
+                        <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="() => RemoveCover(book)">Delete Cover</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => AddCover(book)">Add Cover</MudButton>
+                    }
+
+                    <MudDivider Class="my-2" />
+
+                    <!-- Artists List -->
+                    <MudText Typo="Typo.subtitle1">Artists</MudText>
+
+                    @if (book.Cover?.Artists != null)
+                    {
+                        @foreach (var artist in book.Cover.Artists)
+                        {
+                            <MudPaper Class="pa-2 mb-2" Elevation="1">
+                                <MudTextField @bind-Value="artist.FirstName" Label="First Name" Variant="Variant.Outlined" />
+                                <MudTextField @bind-Value="artist.LastName" Label="Last Name" Variant="Variant.Outlined" />
+                                <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="() => RemoveArtist(book, artist)">Remove Artist</MudButton>
+                            </MudPaper>
+                        }
+                    }
+
+                    @if (book.Cover != null)
+                    {
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => AddArtist(book)">
+                            Add Artist
+                        </MudButton>
+                    }
+
+                    <MudDivider Class="my-2" />
+
+                    <!-- Save / Cancel -->
+                    <MudStack Row="true" Spacing="2">
+                        <MudButton OnClick="() => SaveEdit(book)" Color="Color.Primary">Save</MudButton>
+                        <MudButton OnClick="CancelEdit" Color="Color.Secondary">Cancel</MudButton>
+                    </MudStack>
+                }
+                else
+                {
+                    <!-- Display Mode -->
+                    <MudText Typo="Typo.h6">@book.Title</MudText>
+                    <MudText>Price: @book.BasePrice</MudText>
+                    <MudText>Published: @book.PublishDate</MudText>
+
+                    @if (book.Cover != null)
+                    {
+                        <MudText>Cover: @book.Cover.Title</MudText>
+                        <MudText>Digital: @(book.Cover.DigitalOnly ? "Yes" : "No")</MudText>
+
+                        @if (book.Cover.Artists != null)
                         {
                             @foreach (var artist in book.Cover.Artists)
                             {
-                                <MudText Typo="Typo.body1">Artist: @artist.FirstName @artist.LastName</MudText>
+                                <MudText>Artist: @artist.FirstName @artist.LastName</MudText>
                             }
                         }
+                    }
 
-                        <MudButton Color="Color.Error" OnClick="() => Delete(book.BooksId)">Delete</MudButton>
-                    </MudStack>
-                </MudPaper>
-            </MudItem>
-        }
+                    <MudButton OnClick="() => Edit(book)">Edit</MudButton>
+                    <MudButton Color="Color.Error" OnClick="() => Delete(book.BooksId)">Delete</MudButton>
+                }
+            </MudPaper>
+        </MudItem>
     }
 </MudGrid>
 
 <MudButton Class="mt-4" OnClick="@GoBack">Back</MudButton>
 
 @code {
-    [Parameter] public int? AuthorId { get; set; }
-
     private List<Book> books = new();
+    private int? editingBookId;
+    private DateTime? bookDate;
 
     protected override async Task OnInitializedAsync()
     {
-        if (AuthorId.HasValue)
-        {
-            books = await bookrepo.GetBooksByAuthorIdAsync(AuthorId.Value);
-        }
-        else
-        {
-            books = await bookrepo.GetBooksAsync();
-        }
+        books = await bookrepo.GetBooksAsync();
+    }
+
+    private void Edit(Book book)
+    {
+        editingBookId = book.BooksId;
+        bookDate = book.PublishDate?.ToDateTime(new TimeOnly(0));
+        // Ensure collections are initialized
+        book.Cover ??= new Cover { Artists = new List<Artist>() };
+        book.Cover.Artists ??= new List<Artist>();
+    }
+
+    private void CancelEdit()
+    {
+        editingBookId = null;
+    }
+
+    private async Task SaveEdit(Book book)
+    {
+        book.PublishDate = bookDate.HasValue ? DateOnly.FromDateTime(bookDate.Value) : null;
+        // await bookrepo.UpdateBookWithCoverAndArtistsAsync(book);
+        editingBookId = null;
+        books = await bookrepo.GetBooksAsync(); // Refresh
+    }
+
+    private void AddCover(Book book)
+    {
+        book.Cover = new Cover
+            {
+                Title = "",
+                DigitalOnly = false,
+                Artists = new List<Artist>()
+            };
+    }
+
+    private void RemoveCover(Book book)
+    {
+        book.Cover = null;
+    }
+
+    private void AddArtist(Book book)
+    {
+        book.Cover.Artists ??= new List<Artist>();
+        book.Cover.Artists.Add(new Artist());
+    }
+
+    private void RemoveArtist(Book book, Artist artist)
+    {
+        book.Cover.Artists.Remove(artist);
     }
 
     private async Task Delete(int bookId)
     {
         await bookrepo.DeleteBookAsync(bookId);
-        if (AuthorId.HasValue)
-        {
-            books = await bookrepo.GetBooksByAuthorIdAsync(AuthorId.Value);
-        }
-        else
-        {
-            books = await bookrepo.GetBooksAsync();
-        }
+        books = await bookrepo.GetBooksAsync();
     }
 
     private void GoBack() => Nav.NavigateTo("/counter");

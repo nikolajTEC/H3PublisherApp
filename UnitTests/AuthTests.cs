@@ -1,22 +1,19 @@
-using Xunit;
 using REST_API.Controllers;
 using Core.Services;
 using Core.DTO;
 using REST_API.Requests;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using System.Threading.Tasks;
 using Castle.Core.Configuration;
 using Core;
 
-public class UnitTest1
+public class AuthTests
 {
     private readonly AuthController _controller;
     private readonly IAuthService _authService;
 
-    public UnitTest1()
+    public AuthTests()
     {
-        // Substitute dependencies manually for AuthService
         var config = Substitute.For<IConfiguration>();
         var repo = Substitute.For<IRepository>();
         _authService = Substitute.For<IAuthService>();
