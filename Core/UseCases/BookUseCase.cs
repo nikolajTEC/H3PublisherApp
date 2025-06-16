@@ -45,5 +45,12 @@ namespace Core.UseCases
 
             await _repo.UpdateAsync(book!);
         }
+
+        public async Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under)
+        {
+            var books = await _repo.GetBooksBySearchCriteriaAsync(name, startDate, endDate, price, under);
+
+            return books;
+        }
     }
 }

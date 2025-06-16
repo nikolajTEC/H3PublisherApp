@@ -7,6 +7,32 @@
 @using MudBlazor
 
 <MudGrid>
+    <MudItem xs="12" sm="4">
+        <MudTextField @bind-Value="_name" Label="Search by Name" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <MudDateRangePicker @bind-DateRange="_dateRange" Label="Search by Date Range" />
+    </MudItem>
+
+  
+
+    <MudItem xs="12" sm="2">
+        <MudNumericField @bind-Value="_price" Label="Price" Variant="Variant.Outlined" />
+    </MudItem>
+
+    <MudItem xs="12" sm="2">
+        <MudRadioGroup T="bool" @bind-SelectedOption="under" Label="Price Filter" Orientation="Orientation.Horizontal">
+            <MudRadio T="bool" Option="false" Label="Under" />
+            <MudRadio T="bool" Option="true" Label="Over" />
+        </MudRadioGroup>
+    </MudItem>
+
+    <MudItem xs="12" class="d-flex justify-end mt-2">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="PerformSearch">
+            Search
+        </MudButton>
+    </MudItem>
     @foreach (var book in books)
     {
         <MudItem xs="12" sm="6" md="4">
@@ -103,6 +129,20 @@
     private List<Book> books = new();
     private int? editingBookId;
     private DateTime? bookDate;
+
+
+    private string? _name;
+    private DateRange _dateRange = new();
+    private double? _price;
+    private bool under = true;
+    private bool over = false;
+    private async Task PerformSearch()
+    {
+        books = await bookrepo.GetBooksBySearchCriterias(_name, _dateRange, _price, under);
+        // Snackbar.Add($"Searching for Name: {_name}, Date: {_dateRange?.Start?.ToShortDateString()} to {_dateRange?.End?.ToShortDateString()}, Price: {_price}", Severity.Info);
+
+        // TODO: Apply filter logic to your data set based on _name, _dateRange, and _price
+    }
 
     protected override async Task OnInitializedAsync()
     {

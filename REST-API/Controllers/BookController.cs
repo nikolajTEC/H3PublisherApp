@@ -3,6 +3,7 @@ using Core.DTO;
 using Core.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using REST_API.Objects;
+using REST_API.Requests;
 
 namespace REST_API.Controllers
 {
@@ -50,6 +51,15 @@ namespace REST_API.Controllers
             //return authors;
             var result = _mapper.Map<List<BookDTO>>(books);
 
+            return result;
+        }
+
+        [HttpPost("search-books")]
+        public async Task<List<BookDTO>> SearchBooks([FromBody] SearchBooksRequest request)
+        {
+            var books = await _usecase.GetBooksBySearchCriteriaAsync(request.Name, request.StartDate, request.EndDate, request.Price, request.Under);
+
+            var result = _mapper.Map<List<BookDTO>>(books);
             return result;
         }
     }

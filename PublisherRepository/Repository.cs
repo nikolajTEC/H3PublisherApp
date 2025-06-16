@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Azure.Core;
+using Core;
 using Core.Objects;
 using Microsoft.EntityFrameworkCore;
 using PublisherRepository.Data;
@@ -13,7 +14,7 @@ namespace PublisherRepository
         public Repository(DataContext context)
         {
             _context = context;
-        }      
+        }
         public async Task<List<Authors>> GetAuthorsAsNoTracking()
         {
             var authors = await _context.Authors
@@ -79,6 +80,44 @@ namespace PublisherRepository
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == name);
             return user;
+        }
+
+        public async Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under)
+        {
+            var query = _context.Books
+                .Include(x => x.Cover)
+                .ThenInclude(x => x.ArtistCovers)
+                .ThenInclude(x => x.Artist)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+                query = query.Where(b => b.Title.Contains(name));
+
+            if (startDate.HasValue)
+            {
+                var start = DateOnly.FromDateTime((DateTime)startDate);
+                query = query.Where(b => b.PublishDate >= start);
+            }
+
+            if (endDate.HasValue)
+            {
+                var end = DateOnly.FromDateTime((DateTime)endDate);
+                query = query.Where(b => b.PublishDate <= end);
+            }
+
+            if (price.HasValue)
+            {
+                if (!under)
+                    query = query.Where(b => b.BasePrice >= price);
+                else
+                    query = query.Where(b => b.BasePrice <= price);
+            }
+
+            var books = await query.ToListAsync();
+
+            return books;
+
         }
     }
 }

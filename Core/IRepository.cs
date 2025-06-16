@@ -14,5 +14,7 @@ namespace Core
         Task<List<Books>> GetBooksAsNoTracking();
         Task<List<Books>> GetBooksByAuthorIdAsNoTracking(int authorId);
         Task<User?> GetUserByName(string name);
+
+        Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under);
     }
 }
