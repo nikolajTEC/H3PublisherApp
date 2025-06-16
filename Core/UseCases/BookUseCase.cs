@@ -31,21 +31,25 @@ namespace Core.UseCases
             return books;
         }
 
-        public async Task EditBook(int id, string? title, DateOnly? publishDate, double? basePrice)
+        //public async Task EditBook(int id, string? title, DateOnly? publishDate, double? basePrice)
+        //{
+        //    var book = await _repo.GetByIdAsync<Books>(id);
+
+        //    if (!string.IsNullOrWhiteSpace(title) && book.Title != title)
+        //        book.Title = title;
+
+        //    if (publishDate != null && book.PublishDate != publishDate)
+        //        book.PublishDate = (DateOnly)publishDate!;
+        //    if (basePrice != null && book.BasePrice != basePrice)
+        //        book.BasePrice = (double)basePrice;
+
+        //    await _repo.UpdateAsync(book!);
+        //}
+        
+        public async Task EditBook(Books book)
         {
-            var book = await _repo.GetByIdAsync<Books>(id);
-
-            if (!string.IsNullOrWhiteSpace(title) && book.Title != title)
-                book.Title = title;
-
-            if (publishDate != null && book.PublishDate != publishDate)
-                book.PublishDate = (DateOnly)publishDate!;
-            if (basePrice != null && book.BasePrice != basePrice)
-                book.BasePrice = (double)basePrice;
-
-            await _repo.UpdateAsync(book!);
+            await _repo.UpdateAsync(book);
         }
-
         public async Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under)
         {
             var books = await _repo.GetBooksBySearchCriteriaAsync(name, startDate, endDate, price, under);

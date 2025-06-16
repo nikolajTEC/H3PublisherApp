@@ -15,16 +15,16 @@
         <MudDateRangePicker @bind-DateRange="_dateRange" Label="Search by Date Range" />
     </MudItem>
 
-  
+
 
     <MudItem xs="12" sm="2">
         <MudNumericField @bind-Value="_price" Label="Price" Variant="Variant.Outlined" />
     </MudItem>
 
     <MudItem xs="12" sm="2">
-        <MudRadioGroup T="bool" @bind-SelectedOption="under" Label="Price Filter" Orientation="Orientation.Horizontal">
-            <MudRadio T="bool" Option="false" Label="Under" />
-            <MudRadio T="bool" Option="true" Label="Over" />
+        <MudRadioGroup @bind-Value="under">
+            <MudRadio Value="true">Under</MudRadio>
+            <MudRadio Value="false">Over</MudRadio>
         </MudRadioGroup>
     </MudItem>
 
@@ -166,7 +166,7 @@
     private async Task SaveEdit(Book book)
     {
         book.PublishDate = bookDate.HasValue ? DateOnly.FromDateTime(bookDate.Value) : null;
-        // await bookrepo.UpdateBookWithCoverAndArtistsAsync(book);
+        await bookrepo.UpdateBookAsync(book);
         editingBookId = null;
         books = await bookrepo.GetBooksAsync(); // Refresh
     }

@@ -62,6 +62,15 @@ namespace REST_API.Controllers
             var result = _mapper.Map<List<BookDTO>>(books);
             return result;
         }
+
+        [HttpPost("edit-book")]
+        public async Task<IActionResult> EditBook([FromBody] BookDTO bookDto)
+        {
+            var book = _mapper.Map<Books>(bookDto);
+            await _usecase.EditBook(book);
+
+            return Ok(book);
+        }
     }
 }
  
