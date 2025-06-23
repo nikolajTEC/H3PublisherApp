@@ -4,14 +4,14 @@ using REST_API.Objects;
 
 namespace Core.UseCases
 {
-    public class AuthorUseCase
+    public class AuthorUseCase : CrudUseCase<Authors>
     {
         private readonly IRepository _repo;
         private readonly IMapper _mapper;
-        public AuthorUseCase(IRepository repo, IMapper mapper)
+        public AuthorUseCase(IGenericRepo genericRepo, IMapper mapper, IRepository repo) : base(genericRepo)
         {
-            _repo = repo;
             _mapper = mapper;
+            _repo = repo;
         }
 
         public async Task<List<Authors>> GetAuthors()
@@ -22,11 +22,11 @@ namespace Core.UseCases
         public async Task CreateAuthor(string firstName, string lastName)
         {
             var author = new Authors(firstName, lastName);
-            await _repo.AddAsync(author);
+            await AddAsync(author);
         }
         public async Task EditAuthor(string? firstName, string? lastName, int id)
         {
-            var author = await _repo.GetByIdAsync<Authors>(id);
+            var author = await GetByIdAsync(id);
 
             if (!string.IsNullOrWhiteSpace(firstName) && author.FirstName != firstName)
                 author.FirstName = firstName;
@@ -34,12 +34,12 @@ namespace Core.UseCases
             if (!string.IsNullOrWhiteSpace(lastName) && author.LastName != lastName)
                 author.LastName = lastName;
 
-            await _repo.UpdateAsync(author!);
+            await UpdateAsync(author);
         }
         public async Task DeleteAuthor(int id)
         {
-            var author = _repo.GetByIdAsync<Authors>(id);
-            await _repo.DeleteAsync(author);
+            var author = await GetByIdAsync(id);
+            await DeleteAsync(author);
         }
     }
 }

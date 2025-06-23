@@ -13,6 +13,7 @@ namespace UnitTests
         private readonly DataContext _context;
         private readonly BookUseCase _useCase;
         private readonly IRepository _repo;
+        private readonly IGenericRepo _genericRepo;
         public BookTests()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
@@ -20,7 +21,8 @@ namespace UnitTests
             .Options;
             _context = new DataContext(options);
             _repo = new Repository(_context);
-            _useCase = new BookUseCase(_repo);
+            _genericRepo = new GenericRepo(_context);
+            _useCase = new BookUseCase(_genericRepo, _repo);
 
             SeedTestData();
         }

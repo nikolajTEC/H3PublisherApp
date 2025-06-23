@@ -12,10 +12,12 @@ namespace Core.Services
     {
         private readonly IConfiguration _config;
         private readonly IRepository _repo;
-        public AuthService(IConfiguration config, IRepository repo)
+        private readonly IGenericRepo _genRepo;
+        public AuthService(IConfiguration config, IRepository repo, IGenericRepo genRepo)
         {
             _config = config;
             _repo = repo;
+            _genRepo = genRepo;
         }
 
         private string GenerateToken(User user)
@@ -47,7 +49,7 @@ namespace Core.Services
                 Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
                 Role = userDTO.Role,
             };
-            await _repo.AddAsync(user);
+            await _genRepo.AddAsync(user);
         }
 
         public async Task<string?> Login(string name, string password)

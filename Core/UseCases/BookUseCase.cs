@@ -2,23 +2,23 @@
 
 namespace Core.UseCases
 {
-    public class BookUseCase
+    public class BookUseCase : CrudUseCase<Books>
     {
         private readonly IRepository _repo;
 
-        public BookUseCase(IRepository repo)
+        public BookUseCase(IGenericRepo genericRepo, IRepository repo) : base(genericRepo)
         {
             _repo = repo;
         }
 
         public async Task CreateBook(Books book)
         {
-            await _repo.AddAsync(book);
+            await AddAsync(book);
         }
         public async Task DeleteBook(int id)
         {
-            var book = await _repo.GetByIdAsync<Books>(id);
-            await _repo.DeleteAsync(book);
+            var book = await GetByIdAsync(id);
+            await DeleteAsync(book);
         }
         public async Task<List<Books>> GetBooks()
         {
@@ -33,7 +33,7 @@ namespace Core.UseCases
         
         public async Task EditBook(Books book)
         {
-            await _repo.UpdateAsync(book);
+            await UpdateAsync(book);
         }
         public async Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under)
         {

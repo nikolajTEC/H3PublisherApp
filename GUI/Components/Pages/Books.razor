@@ -37,7 +37,7 @@
     {
         <MudItem xs="12" sm="6" md="4">
             <MudPaper Class="pa-4">
-                @if (editingBookId == book.BooksId)
+                @if (editingBookId == book.Id)
                 {
                     <MudText Typo="Typo.h6">Edit Book</MudText>
 
@@ -148,7 +148,7 @@
 
     private void Edit(Book book)
     {
-        editingBookId = book.BooksId;
+        editingBookId = book.Id;
         bookDate = book.PublishDate?.ToDateTime(new TimeOnly(0));
         // Ensure collections are initialized
         book.Cover ??= new Cover { Artists = new List<Artist>() };

@@ -23,7 +23,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddScoped<CreateUseCases>();
+builder.Services.AddScoped<IGenericRepo, GenericRepo>();
 builder.Services.AddScoped<ArtistUseCase>();
 builder.Services.AddScoped<AuthorUseCase>();
 builder.Services.AddScoped<BookUseCase>();

@@ -4,7 +4,7 @@ namespace H3PublisherApp.Models
 {
     public class Cover
     {
-        public int CoversId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public bool DigitalOnly { get; set; }
 

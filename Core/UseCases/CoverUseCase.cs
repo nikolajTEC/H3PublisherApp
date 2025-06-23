@@ -2,23 +2,20 @@
 
 namespace Core.UseCases
 {
-    public class CoverUseCase
+    public class CoverUseCase : CrudUseCase<Covers>
     {
-    private readonly IRepository _repo;
-
-        public CoverUseCase(IRepository repo)
+        public CoverUseCase(IGenericRepo genericRepo) : base(genericRepo)
         {
-            _repo = repo;
         }
 
         public async Task CreateCover(string title, bool digitalOnly, int bookId)
         {
             var cover = new Covers(title, digitalOnly, bookId);
-            await _repo.AddAsync(cover);
+            await AddAsync(cover);
         }
         public async Task EditCover(int id, string? title, bool digitalOnly)
         {
-            var cover = await _repo.GetByIdAsync<Covers>(id);
+            var cover = await GetByIdAsync(id);
 
             if (!string.IsNullOrWhiteSpace(title) && cover.Title != title)
                 cover.Title = title;
@@ -26,12 +23,12 @@ namespace Core.UseCases
             if (cover.DigitalOnly != digitalOnly)
                 cover.DigitalOnly = digitalOnly;
 
-            await _repo.UpdateAsync(cover!);
+            await UpdateAsync(cover!);
         }
         public async Task DeleteCover(int id)
         {
-            var cover = _repo.GetByIdAsync<Covers>(id);
-            await _repo.DeleteAsync(cover);
+            var cover = await GetByIdAsync(id);
+            await DeleteAsync(cover);
         }
     }
 }

@@ -2,28 +2,25 @@
 
 namespace Core.UseCases
 {
-    public class ArtistUseCase
+    public class ArtistUseCase : CrudUseCase<Artists>
     {
-        private readonly IRepository _repo;
-
-        public ArtistUseCase(IRepository repo)
+        public ArtistUseCase(IGenericRepo repo) : base(repo)
         {
-            _repo = repo;
         }
 
         public async Task CreateArtist(string firstname, string lastName)
         {
             var artist = new Artists(firstname, lastName);
-            await _repo.AddAsync(artist);
+            await AddAsync(artist);
         }
         public async Task DeleteArtist(int id)
         {
-            var artist = _repo.GetByIdAsync<Artists>(id);
-            await _repo.DeleteAsync(artist);
+            var artist = await GetByIdAsync(id);
+            await DeleteAsync(artist);
         }
         public async Task EditArtist(int id, string? firstName, string? lastName)
         {
-            var artist = await _repo.GetByIdAsync<Artists>(id);
+            var artist = await GetByIdAsync(id);
 
             if (!string.IsNullOrWhiteSpace(firstName) && artist.FirstName != firstName)
                 artist.FirstName = firstName;
@@ -31,7 +28,7 @@ namespace Core.UseCases
             if (!string.IsNullOrWhiteSpace(lastName) && artist.LastName != lastName)
                 artist.LastName = lastName;
 
-            await _repo.UpdateAsync(artist!);
+            await UpdateAsync(artist);
         }
     }
 }
