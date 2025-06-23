@@ -30,21 +30,6 @@ namespace Core.UseCases
             var books = await _repo.GetBooksByAuthorIdAsNoTracking(authorId);
             return books;
         }
-
-        //public async Task EditBook(int id, string? title, DateOnly? publishDate, double? basePrice)
-        //{
-        //    var book = await _repo.GetByIdAsync<Books>(id);
-
-        //    if (!string.IsNullOrWhiteSpace(title) && book.Title != title)
-        //        book.Title = title;
-
-        //    if (publishDate != null && book.PublishDate != publishDate)
-        //        book.PublishDate = (DateOnly)publishDate!;
-        //    if (basePrice != null && book.BasePrice != basePrice)
-        //        book.BasePrice = (double)basePrice;
-
-        //    await _repo.UpdateAsync(book!);
-        //}
         
         public async Task EditBook(Books book)
         {

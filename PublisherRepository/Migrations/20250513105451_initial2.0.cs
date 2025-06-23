@@ -79,7 +79,7 @@ namespace PublisherRepository.Migrations
                         name: "FK_Covers_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "BooksId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -97,7 +97,7 @@ namespace PublisherRepository.Migrations
                         name: "FK_ArtistCovers_Artists_ArtistsId",
                         column: x => x.ArtistsId,
                         principalTable: "Artists",
-                        principalColumn: "ArtistsId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ArtistCovers_Covers_CoversId",

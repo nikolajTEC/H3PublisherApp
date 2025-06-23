@@ -36,7 +36,7 @@ namespace REST_API
 					{
 						dest.ArtistCovers = src.Artists.Select(artistDto => new ArtistCover
 						{
-							ArtistsId = artistDto.ArtistsId,
+							ArtistsId = artistDto.Id,
 							Artist = context.Mapper.Map<Artists>(artistDto),
 							CoversId = dest.CoversId,
 							Cover = dest

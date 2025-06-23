@@ -21,7 +21,7 @@
         public int AuthorId { get; set; }
         public Authors Author { get; set; }
 
-        public int CoverId { get; set; }
+        public int? CoverId { get; set; }
         public Covers Cover { get; set; }
     }
 }

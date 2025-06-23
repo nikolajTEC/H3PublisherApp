@@ -49,13 +49,13 @@ namespace PublisherRepository.Migrations
 
             modelBuilder.Entity("REST_API.Objects.ArtistCover", b =>
                 {
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int>("CoversId")
                         .HasColumnType("int");
 
-                    b.HasKey("ArtistsId", "CoversId");
+                    b.HasKey("Id", "CoversId");
 
                     b.HasIndex("CoversId");
 
@@ -64,13 +64,13 @@ namespace PublisherRepository.Migrations
 
             modelBuilder.Entity("REST_API.Objects.Artists", b =>
                 {
-                    b.Property<int>("ArtistsId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArtistsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("firstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -78,7 +78,7 @@ namespace PublisherRepository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ArtistsId");
+                    b.HasKey("Id");
 
                     b.ToTable("Artists");
                 });
@@ -91,7 +91,7 @@ namespace PublisherRepository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("firstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -106,11 +106,11 @@ namespace PublisherRepository.Migrations
 
             modelBuilder.Entity("REST_API.Objects.Books", b =>
                 {
-                    b.Property<int>("BooksId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BooksId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
@@ -128,7 +128,7 @@ namespace PublisherRepository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BooksId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
@@ -165,7 +165,7 @@ namespace PublisherRepository.Migrations
                 {
                     b.HasOne("REST_API.Objects.Artists", "Artist")
                         .WithMany("ArtistCovers")
-                        .HasForeignKey("ArtistsId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -139,9 +139,6 @@
     private async Task PerformSearch()
     {
         books = await bookrepo.GetBooksBySearchCriterias(_name, _dateRange, _price, under);
-        // Snackbar.Add($"Searching for Name: {_name}, Date: {_dateRange?.Start?.ToShortDateString()} to {_dateRange?.End?.ToShortDateString()}, Price: {_price}", Severity.Info);
-
-        // TODO: Apply filter logic to your data set based on _name, _dateRange, and _price
     }
 
     protected override async Task OnInitializedAsync()
