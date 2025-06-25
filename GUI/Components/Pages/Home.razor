@@ -6,33 +6,59 @@
 @inject NavigationManager Navigation
 @inject CustomAuthStateProvider AuthenticationStateProvider
 @using Microsoft.AspNetCore.Components.Authorization
-<MudLayout>
-    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .login-background {
+        background-color: #f0f2f5;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        background-color: white;
+        width: 100%;
+    }
+</style>
+
+<div class="login-background">
+    <MudContainer MaxWidth="MaxWidth.Small">
         <MudGrid Justify="Justify.Center">
-            <MudItem xs="12" sm="8" md="6">
-                @if (isAuthenticated)
-                {
-                    <MudCard Class="text-center p-4">
-                        <MudText Typo="Typo.h4">Welcome back!</MudText>
-                        <MudText Typo="Typo.subtitle1" Class="mt-2">You are signed in.</MudText>
-                        <MudButton OnClick="@Logout">Logout</MudButton>                        
-                    </MudCard>
-                }
-                else
-                {
-                    <MudCard Class="text-center p-4">
-                        <MudText Typo="Typo.h3">Welcome to publisher app</MudText>
-                        <MudText Typo="Typo.subtitle1" Class="mt-2">
-                            Please sign into your account
-                        </MudText>
-                        <MudDivider Class="my-2" />
-                        <MudButton Color="Color.Primary" OnClick="@OpenLoginDialog">Sign in</MudButton>
-                    </MudCard>
-                }
+            <MudItem xs="12">
+                <div class="login-card">
+                    @if (isAuthenticated)
+                    {
+                        <MudText Typo="Typo.h4" Align="Align.Center">Welcome back!</MudText>
+                        <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mt-2">You are signed in.</MudText>
+                        <div class="mt-4" style="text-align:center">
+                            <MudButton OnClick="@Logout" Color="Color.Secondary">Logout</MudButton>
+                        </div>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.h3" Align="Align.Center">Welcome to Publisher App</MudText>
+                        <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mt-2">Please sign into your account</MudText>
+                        <MudDivider Class="my-4" />
+                        <div style="text-align:center">
+                            <MudButton Color="Color.Primary" OnClick="@OpenLoginDialog" Variant="Variant.Filled">
+                                Sign in
+                            </MudButton>
+                        </div>
+                    }
+                </div>
             </MudItem>
         </MudGrid>
     </MudContainer>
-</MudLayout>
+</div>
 
 @code {
     private bool isAuthenticated = false;

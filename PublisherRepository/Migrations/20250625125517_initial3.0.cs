@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PublisherRepository.Migrations
 {
     /// <inheritdoc />
-    public partial class initial20 : Migration
+    public partial class initial30 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,14 +15,14 @@ namespace PublisherRepository.Migrations
                 name: "Artists",
                 columns: table => new
                 {
-                    ArtistsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Artists", x => x.ArtistsId);
+                    table.PrimaryKey("PK_Artists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,20 +40,35 @@ namespace PublisherRepository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Users",
                 columns: table => new
                 {
-                    BooksId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BasePrice = table.Column<double>(type: "float", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    CoverId = table.Column<int>(type: "int", nullable: false)
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.BooksId);
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublishDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    BasePrice = table.Column<double>(type: "float", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false),
+                    CoverId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
@@ -66,7 +81,7 @@ namespace PublisherRepository.Migrations
                 name: "Covers",
                 columns: table => new
                 {
-                    CoversId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DigitalOnly = table.Column<bool>(type: "bit", nullable: false),
@@ -74,7 +89,7 @@ namespace PublisherRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Covers", x => x.CoversId);
+                    table.PrimaryKey("PK_Covers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Covers_Books_BookId",
                         column: x => x.BookId,
@@ -103,7 +118,7 @@ namespace PublisherRepository.Migrations
                         name: "FK_ArtistCovers_Covers_CoversId",
                         column: x => x.CoversId,
                         principalTable: "Covers",
-                        principalColumn: "CoversId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -129,6 +144,9 @@ namespace PublisherRepository.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ArtistCovers");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Artists");

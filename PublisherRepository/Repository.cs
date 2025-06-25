@@ -49,6 +49,16 @@ namespace PublisherRepository
             return books;
         }
 
+        public async Task<Books> GetBookAndChildObjectsAsync(int id)
+        {
+            var books = await _context.Books
+                .Include(x => x.Cover)
+                .ThenInclude(x => x.ArtistCovers)
+                .ThenInclude(x => x.Artist)
+                .FirstOrDefaultAsync();
+            return books;
+        }
+
         public async Task<User?> GetUserByName(string name)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == name);

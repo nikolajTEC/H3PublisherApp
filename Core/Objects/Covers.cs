@@ -13,7 +13,7 @@
             BookId = bookId;
         }
 
-        public int CoversId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }   
         public bool DigitalOnly { get; set; }
         public int BookId { get; set; }

@@ -30,8 +30,17 @@ namespace PublisherRepository
         }
         public async Task UpdateAsync<T>(T entity) where T : class
         {
+            _context.ChangeTracker.Clear();
             _context.Set<T>().Update(entity);
+            try
+            {
             await _context.SaveChangesAsync();
+
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task DeleteAsync<T>(T entity) where T : class

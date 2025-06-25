@@ -1,4 +1,5 @@
-﻿using REST_API.Objects;
+﻿using AutoMapper;
+using REST_API.Objects;
 
 namespace Core.UseCases
 {
@@ -33,7 +34,24 @@ namespace Core.UseCases
         
         public async Task EditBook(Books book)
         {
-            await UpdateAsync(book);
+            var oldbook = await _repo.GetBookAndChildObjectsAsync(book.Id);
+            oldbook.BasePrice = book.BasePrice;
+            oldbook.Title = book.Title;
+            oldbook.PublishDate = book.PublishDate;
+            if (book.Cover != null)
+            {
+                if (oldbook.Cover != null)
+                {
+                    oldbook.Cover.Title = book.Cover.Title;
+                    oldbook.Cover.DigitalOnly = book.Cover.DigitalOnly;
+                }
+                else
+                {
+                    oldbook.Cover = book.Cover;
+                }
+            }
+
+            await UpdateAsync(oldbook);
         }
         public async Task<List<Books>> GetBooksBySearchCriteriaAsync(string? name, DateTime? startDate, DateTime? endDate, double? price, bool under)
         {

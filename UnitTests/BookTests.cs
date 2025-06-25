@@ -44,16 +44,16 @@ namespace UnitTests
             // Create Artists
             var artists = new List<Artists>
         {
-            new Artists { ArtistsId = 1, FirstName = "John", LastName = "Doe" },
-            new Artists { ArtistsId = 2, FirstName = "Jane", LastName = "Test"}
+            new Artists { Id = 1, FirstName = "John", LastName = "Doe" },
+            new Artists { Id = 2, FirstName = "Jane", LastName = "Test"}
         };
 
             // Create Covers
             var covers = new List<Covers>
         {
-            new Covers { CoversId = 1, Title = "Fantasy Cover" },
-            new Covers { CoversId = 2, Title = "Sci-Fi Cover" },
-            new Covers { CoversId = 3, Title = "Romance Cover" }
+            new Covers { Id = 1, Title = "Fantasy Cover" },
+            new Covers { Id = 2, Title = "Sci-Fi Cover" },
+            new Covers { Id = 3, Title = "Romance Cover" }
         };
 
             // Create Books with various scenarios
@@ -61,7 +61,7 @@ namespace UnitTests
         {
             new Books
             {
-                BooksId = 1,
+                Id = 1,
                 Title = "The Great Adventure",
                 PublishDate = new DateOnly(2020, 1, 15),
                 BasePrice = 19.99,
@@ -69,7 +69,7 @@ namespace UnitTests
             },
             new Books
             {
-                BooksId = 2,
+                Id = 2,
                 Title = "Space Odyssey",
                 PublishDate = new DateOnly(2021, 6, 20),
                 BasePrice = 24.99,
@@ -77,7 +77,7 @@ namespace UnitTests
             },
             new Books
             {
-                BooksId = 3,
+                Id = 3,
                 Title = "Love Story",
                 PublishDate = new DateOnly(2022, 12, 10),
                 BasePrice = 15.50,
@@ -85,7 +85,7 @@ namespace UnitTests
             },
             new Books
             {
-                BooksId = 4,
+                Id = 4,
                 Title = "Adventure Continues",
                 PublishDate = new DateOnly(2023, 3, 5),
                 BasePrice = 29.99,
@@ -93,7 +93,7 @@ namespace UnitTests
             },
             new Books
             {
-                BooksId = 5,
+                Id = 5,
                 Title = "Mystery Novel",
                 PublishDate = new DateOnly(2019, 8, 12),
                 BasePrice = 22.00,

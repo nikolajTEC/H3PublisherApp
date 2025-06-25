@@ -1,7 +1,7 @@
 ﻿@page "/books"
 @inject BookRepo bookrepo
 @inject NavigationManager Nav
-@inject CustomAuthStateProvider AuthStateProvider
+@inject CustomAuthStateProvider AuthenticationStateProvider
 @using H3PublisherApp.Models
 @using H3PublisherApp.Services
 @using MudBlazor
@@ -114,9 +114,11 @@
                             }
                         }
                     }
-
-                    <MudButton OnClick="() => Edit(book)">Edit</MudButton>
-                    <MudButton Color="Color.Error" OnClick="() => Delete(book.Id)">Delete</MudButton>
+                    @if (isAuthenticated)
+                    {
+                        <MudButton OnClick="() => Edit(book)">Edit</MudButton>
+                        <MudButton Color="Color.Error" OnClick="() => Delete(book.Id)">Delete</MudButton>
+                    }
                 }
             </MudPaper>
         </MudItem>
@@ -130,6 +132,19 @@
     private int? editingBookId;
     private DateTime? bookDate;
 
+    private bool isAuthenticated = false;
+    private bool hasCheckedAuth = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+            hasCheckedAuth = true;
+            StateHasChanged();
+        }
+    }
 
     private string? _name;
     private DateRange _dateRange = new();

@@ -3,14 +3,13 @@
 @using H3PublisherApp.Services
 @using MudBlazor
 @using MudBlazor.Services
+@inject CustomAuthStateProvider AuthenticationStateProvider
 @inject NavigationManager Nav
 @inject IDialogService DialogService
 @page "/authorPage"
 
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="AddAuthorAsync">
-    Add author
-</MudButton>
+
 @if (authors == null)
 {
     <MudProgressCircular Indeterminate="true" />
@@ -18,6 +17,19 @@
 else
 {
     <MudGrid Spacing="6">
+        @if (isAuthenticated)
+        {
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           Class="mt-2"
+                           Style="align-self: start;"
+                           OnClick="AddAuthorAsync">
+                    Add author
+                </MudButton>
+            </MudItem>
+        }
         @foreach (var author in authors)
         {
             <MudItem xs="12" sm="6" md="4">
@@ -35,9 +47,6 @@ else
 
                         @if (author.Books?.Any() == true)
                         {
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => OpenAuthorBooksAsync(author.Books))">
-                                View Books
-                            </MudButton>
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => ViewBookPage(author.Id))">
                                 View BooksPage
                             </MudButton>
@@ -46,9 +55,12 @@ else
                         {
                             <MudText Class="text-muted mt-2">No books found.</MudText>
                         }
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => AddBookAsync(author))">
-                            Add book
-                        </MudButton>
+                        @if (isAuthenticated)
+                        {
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mt-2" Style="align-self: start;" OnClick="@((e) => AddBookAsync(author))">
+                                Add book
+                            </MudButton>
+                        }
                     </MudStack>
                 </MudPaper>
             </MudItem>
@@ -61,6 +73,20 @@ else
 @code {
     private List<Author> authors;
     private AuthorRepo _authorRepo = new();
+
+    private bool isAuthenticated = false;
+    private bool hasCheckedAuth = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+            hasCheckedAuth = true;
+            StateHasChanged();
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         var response = await _authorRepo.GetAuthors();
@@ -85,12 +111,14 @@ else
         };
         return DialogService.ShowAsync<AddBookDialog>("Simple Dialog", parameters, options);
     }
-    private Task AddAuthorAsync()
+    private async Task AddAuthorAsync()
     {
         var parameters = new DialogParameters();
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<AddAuthor>("Add Name", parameters, options);
+        await DialogService.ShowAsync<AddAuthor>("Add Name", parameters, options);
+        authors = await _authorRepo.GetAuthors();
+        StateHasChanged();
     }
 
     private void ViewBookPage(int authorId)

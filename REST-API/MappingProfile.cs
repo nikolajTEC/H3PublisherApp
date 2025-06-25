@@ -20,7 +20,7 @@ namespace REST_API
 
             // Book mappings
             CreateMap<Books, BookDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.BooksId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap()
                 .ForMember(dest => dest.Author, opt => opt.Ignore());
 
@@ -39,7 +39,7 @@ namespace REST_API
                         {
                             ArtistsId = artistDto.Id,
                             Artist = context.Mapper.Map<Artists>(artistDto),
-                            CoversId = dest.CoversId,
+                            CoversId = dest.Id,
                             Cover = dest
                         }).ToList();
                     }

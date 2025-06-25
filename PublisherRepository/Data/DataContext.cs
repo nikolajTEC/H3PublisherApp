@@ -46,17 +46,17 @@ namespace PublisherRepository.Data
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Covers>()
-                .HasKey(c => c.CoversId);
+                .HasKey(c => c.Id);
 
             modelBuilder.Entity<Covers>()
-                .Property(c => c.CoversId)
+                .Property(c => c.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Artists>()
-                .HasKey(a => a.ArtistsId);
+                .HasKey(a => a.Id);
 
             modelBuilder.Entity<Artists>()
-                .Property(a => a.ArtistsId)
+                .Property(a => a.Id)
                 .ValueGeneratedOnAdd();
         }
 
