@@ -39,7 +39,6 @@ namespace REST_API.Controllers
         public async Task<List<BookDTO>> GetBooks()
         {
             var books = await _usecase.GetBooks();
-            //return authors;
             var result = _mapper.Map<List<BookDTO>>(books);
 
             return result;
@@ -48,7 +47,6 @@ namespace REST_API.Controllers
         public async Task<List<BookDTO>> GetBooksByAuthorId(int authorId)
         {
             var books = await _usecase.GetBooksByAuthorId(authorId);
-            //return authors;
             var result = _mapper.Map<List<BookDTO>>(books);
 
             return result;
